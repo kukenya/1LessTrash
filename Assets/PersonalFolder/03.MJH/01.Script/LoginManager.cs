@@ -108,7 +108,7 @@ public class LoginManager : MonoBehaviour
         //만약에 응답이 성공했다면
         if (req.result == UnityWebRequest.Result.Success)
         {
-            //print("네트워크 응답 : " + req.downloadHandler.text);
+            print("네트워크 응답 : " + req.downloadHandler.text);
 
             if (httpInfo.onReceive != null)
             {
@@ -132,7 +132,8 @@ public class LoginManager : MonoBehaviour
 
         info.Set(RequestType.POST, "/register", (DownloadHandler downloadHandler) => {
             //Post 데이터 전송했을 때 서버로부터 응답 옵니다~
-            print("응답성공 : " +  downloadHandler.text);
+            //print("응답성공 : " +  downloadHandler.text);
+            TitleSceneManager.instance.CheckBox(true, downloadHandler);
         });
 
         LoginData signUpInfo = new LoginData();
