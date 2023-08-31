@@ -3,9 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 
 public class TitleSceneManager : MonoBehaviour
 {
+    public static TitleSceneManager instance;
+    private void Awake()
+    {
+        instance = this;
+    }
+
     // Input Field
     public InputField inputEmail;
     public InputField inputPassword;
@@ -69,7 +76,7 @@ public class TitleSceneManager : MonoBehaviour
 
             // 체크박스 비활성화
             checkBox.SetActive(false);
-            
+
             // InputField 초기화
             popupEmail.text = "";
             popupPassword.text = "";
@@ -109,25 +116,13 @@ public class TitleSceneManager : MonoBehaviour
 
     public void OnClickSignUp()
     {
-        StartCoroutine(CoSignUp());
+        //StartCoroutine(CoSignUp());
+        LoginManager.instance.SignUp(popupEmail.text, popupPassword.text, regionSelectButton.text);
     }
 
-    IEnumerator CoSignUp()
+    public void CheckBox(bool isactive, DownloadHandler downloadHandler)
     {
-        print("회원가입");
-
-        // 회원가입 시도
-        print("LoginManager.instance : " + LoginManager.instance);
-        print("popupEmail : " + popupEmail);
-        print("popupPassword : " + popupPassword);
-        print("regionSelectButton : " + regionSelectButton);
-        LoginManager.instance.SignUp(popupEmail.text, popupPassword.text, regionSelectButton.text);
-
-        // 기다림
-        yield return new WaitForSeconds(2f); // new WaitUntil(() => 회원가입 완료);
-
-        // 만약 예외사항이 없으면 
-        if(signup == true)
+        if (signup == isactive)
         {
             // 회원가입 성공 -> 회원가입 성공 팝업 UI
             checkBox.SetActive(true);
@@ -141,9 +136,28 @@ public class TitleSceneManager : MonoBehaviour
             // 회원가입 실패 -> 실패원인 팝업 UI
             checkBox.SetActive(true);
             result.text = "회원가입 실패";
-            reason.text = "이미 회원가입된 이메일입니다.";   // 나중에 서버에서 받아오는 코드로 변경
+            //reason.text = "이미 회원가입된 이메일입니다.";   // 나중에 서버에서 받아오는 코드로 변경
+            reason.text = downloadHandler.text;   // 나중에 서버에서 받아오는 코드로 변경
         }
     }
+
+    //IEnumerator CoSignUp()
+    //{
+    //    print("회원가입");
+
+    //    // 회원가입 시도
+    //    print("LoginManager.instance : " + LoginManager.instance);
+    //    print("popupEmail : " + popupEmail);
+    //    print("popupPassword : " + popupPassword);
+    //    print("regionSelectButton : " + regionSelectButton);
+    //    v
+
+    //    // 기다림
+    //    yield return new WaitForSeconds(2f); // new WaitUntil(() => 회원가입 완료);
+
+    //    // 만약 예외사항이 없으면 
+    //    
+    //}
     #endregion
 
 
