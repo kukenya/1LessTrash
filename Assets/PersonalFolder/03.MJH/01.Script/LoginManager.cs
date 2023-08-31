@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using System.Net;
 using System.IO;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 
 [Serializable]
@@ -15,39 +16,55 @@ public class JsonList<T>
     public List<T> results;
 }
 
-
-[Serializable]
-public class LoginData
+public class UserInfo
 {
-    //public string id;
     public string login_id;
-    public string pw;
-    public string region;
-    //public int clear;
-    //public int sum;
-    //public float probabilty;
-    public bool success;
 
 }
 
 [Serializable]
-public class LoginResult
+public class ResultGame
 {
-    public bool success;
+    public int status;
     public string message;
-    public int userId;
 }
 
-    public class MemberData
+[Serializable]
+public class GameInfo
 {
-    public List<LoginData> members = new List<LoginData>();
-    //public bool succes;
-
+    public string name;
+    public string status;
 }
+
+[System.Serializable]
+public class RootData
+{
+    //public LoginData loginData;
+    public ResultGame resultGame;
+    public GameInfo[] gameInfo;
+}
+
+
+[System.Serializable]
+public class ItemData
+{
+    public string name;
+    public string category;
+    public int count;
+    public int clear;
+}
+
+
+
 
 public class LoginManager : MonoBehaviour
 {
     public static LoginManager instance;
+
+    public UserInfo myInfo = new UserInfo();
+
+
+    List<ItemData> listItemData = new List<ItemData>();
 
     private void Awake()
     {
@@ -57,6 +74,15 @@ public class LoginManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        string[] itemName = { "bottle", "milkbox", "box", "can", "note", "toothbrush", "brokendish"};
+        string[] category = { };
+        for (int i = 0; i < 7; i++)
+        {
+            ItemData data = new ItemData();
+            
+        }
+
+
 
         //StartCoroutine(GetRequest("http://localhost:3000/register"));
         //StartCoroutine(GetRequest("http://192.168.1.75:8888"));
@@ -154,11 +180,20 @@ public class LoginManager : MonoBehaviour
             //Post 데이터 전송했을 때 서버로부터 응답 옵니다~
             print("응답성공 : " + downloadHandler.text);
 
-            LoginResult result = JsonUtility.FromJson<LoginResult>(downloadHandler.text);
+            JObject json = JObject.Parse(downloadHandler.text);
+            bool success = json["success"].ToObject<bool>();
+            string message = json["message"].ToString();
 
-            if (result != null && result.success == false)
+            int userId = 0;
+            if (json["userId"] != null)
             {
-                print("실패 : " + result.message);
+                userId = json["userId"].ToObject<int>();
+            }
+
+
+            if (success == false)
+            {
+                print("실패 : " + message);
                 TitleSceneManager.instance.CheckBox(false);
             }
             else
@@ -167,7 +202,7 @@ public class LoginManager : MonoBehaviour
 
                 //print(list.results[0].success);
 
-                print("성공 : userid : " + result.userId + ", message : "+ result.message);
+                print("성공 : userid : " + userId + ", message : "+ message);
                 TitleSceneManager.instance.CheckBox(true);
             }
             //byte[] byteData = new byte[downloadHandler.data.Length];
@@ -193,12 +228,13 @@ public class LoginManager : MonoBehaviour
 
         });
 
-        LoginData signUpInfo = new LoginData();
-        signUpInfo.login_id = id;
-        signUpInfo.pw = pw;
-        signUpInfo.region = region;
+        JObject json = new JObject();
+        json["login_id"] = id;
+        json["pw"] = pw;
+        json["region"] = region;
 
-        info.body = JsonUtility.ToJson(signUpInfo);
+
+        info.body = json.ToString();
         //request.Dispose();
         SendRequest(info);
 
@@ -207,26 +243,58 @@ public class LoginManager : MonoBehaviour
     //로그인
     public void Login(string id, string pw)
     {
+        myInfo.login_id = id;
+
         HttpInfo info = new HttpInfo();
 
         info.Set(RequestType.POST, "/login", (DownloadHandler downloadHandler) =>
         {
             //Post 데이터 전송했을 때 서버로부터 응답 옵니다~
             print("응답성공 : " + downloadHandler.text);
+
+
         });
 
-        LoginData signUpInfo = new LoginData();
-        signUpInfo.login_id = id;
-        signUpInfo.pw = pw;
+        JObject json = new JObject();
+        json["login_id"] = id;
+        json["pw"] = pw;
+
+        //LoginData signUpInfo = new LoginData();
+        //signUpInfo.login_id = id;
+        //signUpInfo.pw = pw;
 
 
-        info.body = JsonUtility.ToJson(signUpInfo);
+        info.body = json.ToString();// JsonUtility.ToJson(signUpInfo);
         //request.Dispose();
         SendRequest(info);
     }
 
+    public void Score()
+    {
+        HttpInfo info = new HttpInfo();
+
+        info.Set(RequestType.POST, "/game/result", (DownloadHandler downloadHandler) =>
+        {
+            //Post 데이터 전송했을 때 서버로부터 응답 옵니다~
+            print("응답성공 : " + downloadHandler.text);
+        });
+
+        JObject json = new JObject();
+
+        //user Json 만듬
+        JObject user = new JObject();
+        user["login_id"] = myInfo.login_id;
+        user["score"] = 10;
+
+        json["user"] = user;
+
+        //data Json  만듬
+
+       
+    }
 
 
+    
     // Update is called once per frame
     void Update()
     {
