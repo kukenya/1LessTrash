@@ -28,6 +28,11 @@ public class LobbySceneManager : MonoBehaviour
     public float recyclePlastic;
     public GameObject[] goPlastic;
 
+    // 나무들
+    public GameObject tree;
+
+    // UI
+    public GameObject[] UI;
 
     void Start()
     {
@@ -42,7 +47,6 @@ public class LobbySceneManager : MonoBehaviour
         // 재활용율이 30 이하라면
         if (recycleCan <= 10 && recycleCan >= 0)
         {
-            print("1");
             // 나무가 죽어감
             goCan[0].SetActive(true);
             goCan[1].SetActive(false);
@@ -51,14 +55,12 @@ public class LobbySceneManager : MonoBehaviour
         // 재활용율이 30 초과, 70 이하라면 
         else if (recycleCan > 10 && recycleCan <= 19)
         {
-            print("2");
             goCan[0].SetActive(false);
             goCan[1].SetActive(true);
             goCan[2].SetActive(false);
         }
         else if (recycleCan > 19 && recycleCan <= 100)
         {
-            print("3");
             goCan[0].SetActive(false);
             goCan[1].SetActive(false);
             goCan[2].SetActive(true);
@@ -194,6 +196,15 @@ public class LobbySceneManager : MonoBehaviour
     {
         if (n == 0)
         {
+            // 나무 비활성화
+            tree.SetActive(false);
+
+            // UI 비활성화
+            for (int i = 0; i < UI.Length; i++)
+            {
+                UI[i].SetActive(false);
+            }
+
             // 메뉴창 열기
             menu.SetActive(true);
         }
@@ -201,6 +212,15 @@ public class LobbySceneManager : MonoBehaviour
         {
             // 메뉴창 닫기
             menu.SetActive(false);
+
+            // UI 활성화
+            for (int i = 0; i < UI.Length; i++)
+            {
+                UI[i].SetActive(true);
+            }
+
+            // 나무 활성화
+            tree.SetActive(true);
         }
         else if (n == 2)
         {
