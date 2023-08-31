@@ -64,25 +64,40 @@ public class LoginManager : MonoBehaviour
     public UserInfo myInfo = new UserInfo();
 
 
-    List<ItemData> listItemData = new List<ItemData>();
+    public List<ItemData> listItemData = new List<ItemData>();
 
     private void Awake()
     {
-        instance = this;
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        
+
+
         string[] itemName = { "bottle", "milkbox", "box", "can", "note", "toothbrush", "brokendish"};
-        string[] category = { };
+        string[] category = { "plastic", "paper", "paper", "can", "paper", "normal", "normal"};
         for (int i = 0; i < 7; i++)
         {
             ItemData data = new ItemData();
-            
+
+            data.name = itemName[i];
+            data.category = category[i];
+            data.clear = 0;
+            data.count = 0;
+
+            listItemData.Add(data);
         }
-
-
 
         //StartCoroutine(GetRequest("http://localhost:3000/register"));
         //StartCoroutine(GetRequest("http://192.168.1.75:8888"));
@@ -163,7 +178,7 @@ public class LoginManager : MonoBehaviour
         //통신 실패
         else
         {
-            print("네트워크 에레 : " + req.error);
+            print("네트워크 에러 : " + req.error);
         }
 
         req.Dispose();
@@ -241,7 +256,7 @@ public class LoginManager : MonoBehaviour
     }
 
     //로그인
-    public void Login(string id, string pw)
+    public void Login(string id, string pw, Action complete)
     {
         myInfo.login_id = id;
 
@@ -252,6 +267,7 @@ public class LoginManager : MonoBehaviour
             //Post 데이터 전송했을 때 서버로부터 응답 옵니다~
             print("응답성공 : " + downloadHandler.text);
 
+            complete();
 
         });
 
@@ -267,6 +283,13 @@ public class LoginManager : MonoBehaviour
         info.body = json.ToString();// JsonUtility.ToJson(signUpInfo);
         //request.Dispose();
         SendRequest(info);
+    }
+
+     
+
+    public void Logout()
+    {
+        myInfo.login_id = null;
     }
 
     public void Score()
@@ -289,8 +312,23 @@ public class LoginManager : MonoBehaviour
         json["user"] = user;
 
         //data Json  만듬
+        JArray jsonArray = new JArray();
+        for(int i = 0; i < listItemData.Count; i++)
+        {
+            JObject itemData = new JObject();
+            itemData["name"] = listItemData[i].name;
+            itemData["category"] = listItemData[i].category;
+            itemData["count"] = listItemData[i].count;
+            itemData["clear"] = listItemData[i].clear;
 
-       
+            jsonArray.Add(itemData);
+        }
+
+        json["data"] = jsonArray;
+
+        info.body = json.ToString();
+
+        SendRequest(info);
     }
 
 
@@ -298,7 +336,36 @@ public class LoginManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            for(int i = 0; i < 50; i++)
+            {
+                int rand = UnityEngine.Random.Range(0, 7);
+                int success = UnityEngine.Random.Range(0, 2);
 
+                listItemData[rand].count++;
+                if(success == 1)
+                {
+                    listItemData[rand].clear++;
+                }
+            }
+            print("111");
+
+            Score();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            print("sssss");
+            HttpInfo info = new HttpInfo();
+
+            info.Set(RequestType.GET, "/users", (DownloadHandler downloadHandler) =>
+            {
+                //Post 데이터 전송했을 때 서버로부터 응답 옵니다~
+                print("응답성공 : " + downloadHandler.text);
+            });
+            SendRequest(info);
+        }
     }
 
     //public void Signup()

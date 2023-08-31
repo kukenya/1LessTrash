@@ -37,6 +37,9 @@ public class TitleSceneManager : MonoBehaviour
 
     void Start()
     {
+        inputEmail.text = "1@naver.com";
+        inputPassword.text = "1";
+
         // 팝업창 비활성화
         popup.SetActive(false);
         // 체크박스 비활성화
@@ -165,7 +168,9 @@ public class TitleSceneManager : MonoBehaviour
     #region 로그인 버튼을 누를 때 호출
     public void OnClickSignIn()
     {
-        StartCoroutine(CoSignIn());
+        LoginManager.instance.Login(inputEmail.text, inputPassword.text, () => {
+            StartCoroutine(CoSignIn());
+        });
     }
 
     IEnumerator CoSignIn()
