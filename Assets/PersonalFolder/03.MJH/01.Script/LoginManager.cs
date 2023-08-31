@@ -353,6 +353,19 @@ public class LoginManager : MonoBehaviour
 
             Score();
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            print("sssss");
+            HttpInfo info = new HttpInfo();
+
+            info.Set(RequestType.GET, "/users", (DownloadHandler downloadHandler) =>
+            {
+                //Post 데이터 전송했을 때 서버로부터 응답 옵니다~
+                print("응답성공 : " + downloadHandler.text);
+            });
+            SendRequest(info);
+        }
     }
 
     //public void Signup()
