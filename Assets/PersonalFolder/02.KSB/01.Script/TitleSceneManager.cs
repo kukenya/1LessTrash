@@ -120,7 +120,7 @@ public class TitleSceneManager : MonoBehaviour
         LoginManager.instance.SignUp(popupEmail.text, popupPassword.text, regionSelectButton.text);
     }
 
-    public void CheckBox(bool isactive, DownloadHandler downloadHandler)
+    public void CheckBox(bool isactive/*, DownloadHandler downloadHandler*/)
     {
         if (signup == isactive)
         {
@@ -137,7 +137,7 @@ public class TitleSceneManager : MonoBehaviour
             checkBox.SetActive(true);
             result.text = "회원가입 실패";
             //reason.text = "이미 회원가입된 이메일입니다.";   // 나중에 서버에서 받아오는 코드로 변경
-            reason.text = downloadHandler.text;   // 나중에 서버에서 받아오는 코드로 변경
+            //reason.text = downloadHandler.text;   // 나중에 서버에서 받아오는 코드로 변경
         }
     }
 

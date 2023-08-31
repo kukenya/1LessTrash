@@ -10,6 +10,13 @@ using System.Text;
 
 
 [Serializable]
+public class JsonList<T>
+{
+    public List<T> data;
+}
+
+
+[Serializable]
 public class LoginData
 {
     //public string id;
@@ -19,6 +26,8 @@ public class LoginData
     //public int clear;
     //public int sum;
     //public float probabilty;
+    public bool success;
+    
 }
 
 public class MemberData
@@ -42,9 +51,9 @@ public class LoginManager : MonoBehaviour
     {
 
         //StartCoroutine(GetRequest("https://localhost:3000/register"));
-        StartCoroutine(GetRequest("http://192.168.1.75:3000"));
+        //StartCoroutine(GetRequest("http://192.168.1.75:8888"));
+        StartCoroutine(GetRequest("http://192.168.1.20:8888"));
 
-        
     }
 
     IEnumerator GetRequest(string url)
@@ -133,7 +142,24 @@ public class LoginManager : MonoBehaviour
         info.Set(RequestType.POST, "/register", (DownloadHandler downloadHandler) => {
             //Post 데이터 전송했을 때 서버로부터 응답 옵니다~
             //print("응답성공 : " +  downloadHandler.text);
-            TitleSceneManager.instance.CheckBox(true, downloadHandler);
+
+            byte[] byteData = downloadHandler.data;
+            string jsonData = Encoding.UTF8.GetString(byteData);
+
+            JsonList<LoginData> loginList = JsonUtility.FromJson<JsonList<LoginData>>(jsonData);
+            
+            for(int i = 0; i < loginList.data.Count; i++)
+            {
+                if(loginList.data[i].success == true)
+                {
+                    TitleSceneManager.instance.CheckBox(true);
+                }
+                else
+                {
+                    TitleSceneManager.instance.CheckBox(false);
+                }
+            }
+            
         });
 
         LoginData signUpInfo = new LoginData();

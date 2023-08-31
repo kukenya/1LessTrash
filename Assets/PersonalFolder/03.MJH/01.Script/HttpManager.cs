@@ -20,6 +20,7 @@ public struct MyInfo
     //public int clear;
     //public int sum;
     //public float probabilty;
+    public bool success;
 
 }
 
@@ -47,7 +48,7 @@ public class HttpInfo
         bool useDefaultUrl = true)
     {
         requestType = type;
-        if (useDefaultUrl) url = "http://192.168.1.75:3000";
+        if (useDefaultUrl) url = "http://192.168.1.20:8888";
         url += u;
         onReceive = callback;
     }
