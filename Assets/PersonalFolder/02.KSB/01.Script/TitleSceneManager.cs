@@ -117,9 +117,14 @@ public class TitleSceneManager : MonoBehaviour
         print("회원가입");
 
         // 회원가입 시도
+        print("LoginManager.instance : " + LoginManager.instance);
+        print("popupEmail : " + popupEmail);
+        print("popupPassword : " + popupPassword);
+        print("regionSelectButton : " + regionSelectButton);
+        LoginManager.instance.SignUp(popupEmail.text, popupPassword.text, regionSelectButton.text);
 
         // 기다림
-        yield return null; // new WaitUntil(() => 회원가입 완료);
+        yield return new WaitForSeconds(2f); // new WaitUntil(() => 회원가입 완료);
 
         // 만약 예외사항이 없으면 
         if(signup == true)

@@ -32,6 +32,10 @@ public class LoginManager : MonoBehaviour
 {
     public static LoginManager instance;
 
+    private void Awake()
+    {
+        instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
