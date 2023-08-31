@@ -40,22 +40,25 @@ public class LobbySceneManager : MonoBehaviour
     {
         #region Can
         // 재활용율이 30 이하라면
-        if (recycleCan <= 30 && recycleCan >= 0)
+        if (recycleCan <= 10 && recycleCan >= 0)
         {
+            print("1");
             // 나무가 죽어감
             goCan[0].SetActive(true);
             goCan[1].SetActive(false);
             goCan[2].SetActive(false);
         }
         // 재활용율이 30 초과, 70 이하라면 
-        else if (recycleCan > 30 && recycleCan <= 70)
+        else if (recycleCan > 10 && recycleCan <= 19)
         {
+            print("2");
             goCan[0].SetActive(false);
             goCan[1].SetActive(true);
             goCan[2].SetActive(false);
         }
-        else if (recycleCan < 70 && recycleCan <= 100)
+        else if (recycleCan > 19 && recycleCan <= 100)
         {
+            print("3");
             goCan[0].SetActive(false);
             goCan[1].SetActive(false);
             goCan[2].SetActive(true);
@@ -74,7 +77,7 @@ public class LobbySceneManager : MonoBehaviour
         Mathf.Clamp(recyclePaper, 0, 100);
 
         // 재활용율이 30 이하라면
-        if (recyclePaper <= 30)
+        if (recyclePaper <= 10)
         {
             // 나무가 죽어감
             goPaper[0].SetActive(true);
@@ -82,7 +85,7 @@ public class LobbySceneManager : MonoBehaviour
             goPaper[2].SetActive(false);
         }
         // 재활용율이 30 초과, 70 이하라면 
-        else if (recyclePaper > 30 && recyclePaper <= 70)
+        else if (recyclePaper > 10 && recyclePaper <= 19)
         {
             goPaper[0].SetActive(false);
             goPaper[1].SetActive(true);
@@ -108,7 +111,7 @@ public class LobbySceneManager : MonoBehaviour
         Mathf.Clamp(recyclePlastic, 0, 100);
 
         // 재활용율이 30 이하라면
-        if (recyclePlastic <= 30)
+        if (recyclePlastic <= 10)
         {
             // 나무가 죽어감
             goPlastic[0].SetActive(true);
@@ -116,7 +119,7 @@ public class LobbySceneManager : MonoBehaviour
             goPlastic[2].SetActive(false);
         }
         // 재활용율이 30 초과, 70 이하라면 
-        else if (recyclePlastic > 30 && recyclePlastic <= 70)
+        else if (recyclePlastic > 10 && recyclePlastic <= 19)
         {
             goPlastic[0].SetActive(false);
             goPlastic[1].SetActive(true);

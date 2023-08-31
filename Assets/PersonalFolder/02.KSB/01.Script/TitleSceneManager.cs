@@ -44,7 +44,7 @@ public class TitleSceneManager : MonoBehaviour
         // 스크롤뷰 비활성화
         regionScroll.SetActive(false);
         //
-        regionSelectButton.color = Color.gray;
+        regionSelectButton.color = Color.white;
     }
 
     #region 버튼
@@ -107,8 +107,8 @@ public class TitleSceneManager : MonoBehaviour
         // 지역이름
         regionSelectButton.text = s;
 
-        // 글씨 색깔 : 검은색
-        regionSelectButton.color = Color.black;
+        // 글씨 색깔 : 흰색
+        regionSelectButton.color = Color.white;
 
         // 지역 스크롤바 비활성화
         regionScroll.SetActive(false);
