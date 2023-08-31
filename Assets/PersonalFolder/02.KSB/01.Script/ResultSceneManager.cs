@@ -138,7 +138,7 @@ public class ResultSceneManager : MonoBehaviour
     public void OnClickReTry()
     {
         // 다시하기 -> 게임씬
-        SceneManager.LoadScene("03.GameScene");
+        SceneManager.LoadScene("PHS");
     }
 
     // Title

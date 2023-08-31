@@ -180,7 +180,7 @@ public class LobbySceneManager : MonoBehaviour
         print("게임 시작");
 
         // 게임씬으로 이동
-        SceneManager.LoadScene("03.GameScene");
+        SceneManager.LoadScene("PHS");
     }
 
     // 전적보기 버튼
