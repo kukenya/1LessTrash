@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/PersonalFolder/02.KSB/00.Scenes/02.LobbyScene.unity
     guid: ed0b9143964770045b4b0f29f50c3a94
   - enabled: 1
+    path: Assets/PersonalFolder/01.PHS/00.Scenes/PHS.unity
+    guid: 7e9997240a5cdd84880df8d73400a654
+  - enabled: 0
     path: Assets/PersonalFolder/02.KSB/00.Scenes/03.GameScene.unity
     guid: 03bf046cd58a565458af627e9073f8ad
   - enabled: 1
