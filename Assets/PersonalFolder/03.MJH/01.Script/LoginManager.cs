@@ -12,7 +12,7 @@ using System.Text;
 [Serializable]
 public class JsonList<T>
 {
-    public List<T> data;
+    public List<T> results;
 }
 
 
@@ -27,14 +27,22 @@ public class LoginData
     //public int sum;
     //public float probabilty;
     public bool success;
-    
+
 }
 
-public class MemberData
+[Serializable]
+public class LoginResult
+{
+    public bool success;
+    public string message;
+    public int userId;
+}
+
+    public class MemberData
 {
     public List<LoginData> members = new List<LoginData>();
     //public bool succes;
-    
+
 }
 
 public class LoginManager : MonoBehaviour
@@ -50,7 +58,7 @@ public class LoginManager : MonoBehaviour
     void Start()
     {
 
-        //StartCoroutine(GetRequest("https://localhost:3000/register"));
+        //StartCoroutine(GetRequest("http://localhost:3000/register"));
         //StartCoroutine(GetRequest("http://192.168.1.75:8888"));
         StartCoroutine(GetRequest("http://192.168.1.20:8888"));
 
@@ -65,13 +73,13 @@ public class LoginManager : MonoBehaviour
             if (www.result != UnityWebRequest.Result.Success)
             {
                 Debug.Log(www.error);
-                
+
             }
             else
             {
                 Debug.Log("Received: " + www.downloadHandler.text);
                 //코드가 맞으면 접속
-                
+
             }
         }
     }
@@ -119,6 +127,8 @@ public class LoginManager : MonoBehaviour
         {
             print("네트워크 응답 : " + req.downloadHandler.text);
 
+
+
             if (httpInfo.onReceive != null)
             {
                 httpInfo.onReceive(req.downloadHandler);
@@ -139,27 +149,48 @@ public class LoginManager : MonoBehaviour
     {
         HttpInfo info = new HttpInfo();
 
-        info.Set(RequestType.POST, "/register", (DownloadHandler downloadHandler) => {
+        info.Set(RequestType.POST, "/register", (DownloadHandler downloadHandler) =>
+        {
             //Post 데이터 전송했을 때 서버로부터 응답 옵니다~
-            //print("응답성공 : " +  downloadHandler.text);
+            print("응답성공 : " + downloadHandler.text);
 
-            byte[] byteData = downloadHandler.data;
-            string jsonData = Encoding.UTF8.GetString(byteData);
+            LoginResult result = JsonUtility.FromJson<LoginResult>(downloadHandler.text);
 
-            JsonList<LoginData> loginList = JsonUtility.FromJson<JsonList<LoginData>>(jsonData);
-            
-            for(int i = 0; i < loginList.data.Count; i++)
+            if (result != null && result.success == false)
             {
-                if(loginList.data[i].success == true)
-                {
-                    TitleSceneManager.instance.CheckBox(true);
-                }
-                else
-                {
-                    TitleSceneManager.instance.CheckBox(false);
-                }
+                print("실패 : " + result.message);
+                TitleSceneManager.instance.CheckBox(false);
             }
-            
+            else
+            {
+                //JsonList<LoginData> list = JsonUtility.FromJson<JsonList<LoginData>>(downloadHandler.text);
+
+                //print(list.results[0].success);
+
+                print("성공 : userid : " + result.userId + ", message : "+ result.message);
+                TitleSceneManager.instance.CheckBox(true);
+            }
+            //byte[] byteData = new byte[downloadHandler.data.Length];
+            //print(downloadHandler.data.Length);
+            //string jsonData = Encoding.UTF8.GetString(byteData);
+
+            //JsonList<LoginData> loginList = JsonUtility.FromJson<JsonList<LoginData>>(jsonData);
+
+            //print(loginList.data.Count);
+            //for(int i = 0; i < loginList.data.Count; i++)
+            //{
+            //    print(loginList.data[i]);
+            //    if(loginList.data[i].success == true)
+            //    {
+            //        TitleSceneManager.instance.CheckBox(true);
+            //    }
+            //    else
+            //    {
+            //        TitleSceneManager.instance.CheckBox(false);
+            //    }
+            //}
+
+
         });
 
         LoginData signUpInfo = new LoginData();
@@ -170,7 +201,7 @@ public class LoginManager : MonoBehaviour
         info.body = JsonUtility.ToJson(signUpInfo);
         //request.Dispose();
         SendRequest(info);
-       
+
     }
 
     //로그인
@@ -178,7 +209,8 @@ public class LoginManager : MonoBehaviour
     {
         HttpInfo info = new HttpInfo();
 
-        info.Set(RequestType.POST, "/login", (DownloadHandler downloadHandler) => {
+        info.Set(RequestType.POST, "/login", (DownloadHandler downloadHandler) =>
+        {
             //Post 데이터 전송했을 때 서버로부터 응답 옵니다~
             print("응답성공 : " + downloadHandler.text);
         });
@@ -198,7 +230,7 @@ public class LoginManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     //public void Signup()
@@ -207,7 +239,7 @@ public class LoginManager : MonoBehaviour
     //    info.Set(RequestType.POST, "/sign_up", (DownloadHandler) => { });
 
     //    MyInfo myInfo = new MyInfo();
-        
+
     //    if(myInfo.id == "1" && myInfo.email == "Sincere@april.biz")
     //    {
     //        print("1번 접속");
