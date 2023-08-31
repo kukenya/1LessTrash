@@ -122,7 +122,7 @@ public class LoginManager : MonoBehaviour
 
 
     //회원가입
-    public void SignUp(string id, string pw)
+    public void SignUp(string id, string pw, string region)
     {
         HttpInfo info = new HttpInfo();
 
@@ -134,6 +134,7 @@ public class LoginManager : MonoBehaviour
         LoginData signUpInfo = new LoginData();
         signUpInfo.login_id = id;
         signUpInfo.pw = pw;
+        signUpInfo.region = region;
 
         info.body = JsonUtility.ToJson(signUpInfo);
         //request.Dispose();
@@ -154,7 +155,7 @@ public class LoginManager : MonoBehaviour
         LoginData signUpInfo = new LoginData();
         signUpInfo.login_id = id;
         signUpInfo.pw = pw;
- 
+
 
         info.body = JsonUtility.ToJson(signUpInfo);
         //request.Dispose();
