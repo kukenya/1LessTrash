@@ -40,7 +40,7 @@ public class LoginManager : MonoBehaviour
         //StartCoroutine(GetRequest("https://localhost:3000/register"));
         StartCoroutine(GetRequest("http://192.168.1.75:3000"));
 
-        PostTest();
+        
     }
 
     IEnumerator GetRequest(string url)
@@ -159,7 +159,6 @@ public class LoginManager : MonoBehaviour
         info.body = JsonUtility.ToJson(signUpInfo);
         //request.Dispose();
         SendRequest(info);
-      
     }
 
 
