@@ -117,6 +117,7 @@ public class TitleSceneManager : MonoBehaviour
     public void OnClickSignUp()
     {
         //StartCoroutine(CoSignUp());
+        print(regionSelectButton.text);
         LoginManager.instance.SignUp(popupEmail.text, popupPassword.text, regionSelectButton.text);
     }
 
