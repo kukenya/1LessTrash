@@ -30,7 +30,7 @@ public class MemberData
 
 public class LoginManager : MonoBehaviour
 {
-    static LoginManager instance;
+    public static LoginManager instance;
 
 
     // Start is called before the first frame update
